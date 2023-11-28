@@ -11,11 +11,21 @@ import { InvitationComponent } from './invitation/invitation.component';
 
 const routes: Routes = [
   { path: '', component: TopComponent },
-  { path: 'mypage', component: DashboardComponent, canActivate: [AuthGuard] },
+  {
+    path: 'mypage',
+    component: DashboardComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'view-users'
+    }
+  },
   {
     path: 'mypage/profile',
     component: ProfileComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    data: {
+      role: 'view-users'
+    }
   },
   {
     path: 'mypage/invoice',
@@ -38,7 +48,7 @@ const routes: Routes = [
     component: InviteComponent,
     canActivate: [AuthGuard],
     data: {
-      role: 'Admin'
+      role: 'view-users'
     }
   },
   {

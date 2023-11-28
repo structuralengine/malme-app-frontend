@@ -35,9 +35,9 @@ function initializeKeycloak(keycloak: KeycloakService) {
     keycloak
       .init({
         config: {
-          url: 'https://auth.malme.app',
-          realm: 'structural-engine',
-          clientId: 'structural-engine'
+          url: environment.keycloakUrl,
+          realm: environment.keycloakRealm,
+          clientId: environment.keycloakClientId
         },
         initOptions: {
           onLoad: 'check-sso'
@@ -46,7 +46,10 @@ function initializeKeycloak(keycloak: KeycloakService) {
         bearerPrefix: 'Bearer',
         bearerExcludedUrls: []
       })
-      .catch((error) => window.alert('ログインに失敗しました'));
+      .catch((error) => {
+        console.log('error =', error);
+        window.alert('ログインに失敗しました');
+      });
 }
 
 @NgModule({

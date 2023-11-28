@@ -16,7 +16,7 @@ export interface TableRow {
 @Component({
   selector: 'app-invoice',
   templateUrl: './invoice.component.html',
-  styleUrls: ['./invoice.component.scss'],
+  styleUrls: ['./invoice.component.scss']
 })
 export class InvoiceComponent implements OnInit {
   currentPlan: any = {
@@ -26,22 +26,12 @@ export class InvoiceComponent implements OnInit {
     paymentMethod: '',
     contractTitle: '',
     contractContent: '',
-    contractUrl: '',
+    contractUrl: ''
   };
-  displayedColumns: string[] = [
-    'paymentDay',
-    'plan',
-    'period',
-    'method',
-    'amount',
-  ];
+  displayedColumns: string[] = ['paymentDay', 'plan', 'period', 'method', 'amount'];
   dataSource: TableRow[] = [];
 
-  constructor(
-    public dialog: MatDialog,
-    private http: HttpClient,
-    private _snackBar: MatSnackBar
-  ) {}
+  constructor(public dialog: MatDialog, private http: HttpClient, private _snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.http.get(`${environment.apiBaseUrl}/sale/last`).subscribe({
@@ -49,13 +39,12 @@ export class InvoiceComponent implements OnInit {
         if (data) {
           this.currentPlan = {
             name: data.plan.name,
-            expirationStart:
-              data.expirationStart && new Date(data.expirationStart),
+            expirationStart: data.expirationStart && new Date(data.expirationStart),
             expirationEnd: data.expirationEnd && new Date(data.expirationEnd),
             paymentMethod: data.paymentMethod?.name,
             contractTitle: data.contract?.title,
             contractContent: data.contract?.content,
-            contractUrl: data.contract?.url,
+            contractUrl: data.contract?.url
           };
         }
       },
@@ -64,8 +53,8 @@ export class InvoiceComponent implements OnInit {
           horizontalPosition: 'end',
           verticalPosition: 'top',
           duration: 5000,
-          panelClass: 'notify-failed',
-        }),
+          panelClass: 'notify-failed'
+        })
     });
     this.http.get(`${environment.apiBaseUrl}/sale/list`).subscribe({
       next: (data: any) => {
@@ -78,7 +67,7 @@ export class InvoiceComponent implements OnInit {
                 plan: sale.plan.name,
                 closingDate: new Date(e.closingMonth),
                 paymentMethod: sale.paymentMethod.name,
-                amount: e.price,
+                amount: e.price
               };
             })
           );
@@ -90,8 +79,8 @@ export class InvoiceComponent implements OnInit {
           horizontalPosition: 'end',
           verticalPosition: 'top',
           duration: 5000,
-          panelClass: 'notify-failed',
-        }),
+          panelClass: 'notify-failed'
+        })
     });
   }
 
