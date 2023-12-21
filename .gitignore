@@ -49,3 +49,6 @@ firebase-debug.log
 
 # Environment files
 src/environments/
+
+# nginX files
+/nginx

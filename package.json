@@ -12,6 +12,7 @@
     "lint:fix": "ng lint --fix"
   },
   "private": true,
+  "sideEffects": true,
   "dependencies": {
     "@angular/animations": "^16.1.0",
     "@angular/cdk": "^16.1.4",

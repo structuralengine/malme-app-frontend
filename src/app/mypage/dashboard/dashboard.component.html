@@ -1,11 +1,11 @@
 <div class="mypage-container">
     <div class="mypage-inner">
-        <img
+        <!-- <img
             src="../../../assets/images/logo_white.png"
             alt="StructuralEngine"
             class="logo-structuralengine"
-        />
-        <h1 class="page-title">お試しプラン</h1>
+        /> -->
+        <!-- <h1 class="page-title">お試しプラン</h1> -->
         <mat-card>
             <mat-card-header>
                 <mat-card-title>アプリケーション</mat-card-title>
@@ -39,7 +39,7 @@
         </mat-card>
         <nav>
             <ul class="page-list">
-                <li class="page-item">
+                <!-- <li class="page-item">
                     <mat-card routerLink="/mypage/plan">
                         <mat-card-header>
                             <mat-card-title-group>
@@ -52,7 +52,7 @@
                             </mat-card-title-group>
                         </mat-card-header>
                     </mat-card>
-                </li>
+                </li> -->
                 <li class="page-item">
                     <mat-card routerLink="/mypage/invoice">
                         <mat-card-header>
@@ -82,22 +82,20 @@
                     </mat-card>
                 </li>
                 <li class="page-item">
-                    <mat-card routerLink="/mypage/invite">
+                    <mat-card routerLink="/mypage/invite" *ngIf="
+                                    userInfo.systemProfile &&
+                                    userInfo.systemProfile.roles.includes('Admin') &&
+                                    userInfo.systemProfile.group
+                                ">
                         <mat-card-header>
                             <mat-card-title-group>
-                                <img
-                                    mat-card-image
-                                    src="../../../assets/images/invite.png"
-                                    alt="チームに招待する"
-                                />
-                                <mat-card-title
-                                    >チームに招待する</mat-card-title
-                                >
+                                <img mat-card-image src="../../../assets/images/invite.png" alt="チームに招待する" />
+                                <mat-card-title>チームに招待する</mat-card-title>
                             </mat-card-title-group>
                         </mat-card-header>
                     </mat-card>
                 </li>
-                <li class="page-item">
+                <!-- <li class="page-item">
                     <mat-card (click)="goTutorial()">
                         <mat-card-header>
                             <mat-card-title-group>
@@ -110,7 +108,7 @@
                             </mat-card-title-group>
                         </mat-card-header>
                     </mat-card>
-                </li>
+                </li> -->
             </ul>
         </nav>
     </div>

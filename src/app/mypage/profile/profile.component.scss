@@ -5,7 +5,7 @@ div.form-container {
 
 .login-info,
 .account-type,
-.organization-info {
+.group-info {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
@@ -18,7 +18,7 @@ div.form-container {
 @media screen and (max-width: 959.98px) {
     .login-info,
     .account-type,
-    .organization-info {
+    .group-info {
         grid-template-columns: 1fr;
     }
 }

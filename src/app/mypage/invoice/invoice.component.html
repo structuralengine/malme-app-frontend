@@ -1,10 +1,10 @@
 <div class="mypage-container">
     <div class="mypage-inner">
-        <img
+        <!-- <img
             src="../../../assets/images/logo_white.png"
             alt="StructuralEngine"
             class="logo-structuralengine"
-        />
+        /> -->
         <div class="page-header">
             <h1 class="page-title">ご請求情報</h1>
             <button
@@ -25,8 +25,8 @@
                         <div class="mt-10">{{ currentPlan.name }}</div>
                     </div>
                     <div>
-                        <div class="bold">有効期限</div>
-                        <div class="mt-10">
+                        <div class="bold" *ngIf="hasExpirationDate">有効期限</div>
+                        <div class="mt-10" *ngIf="hasExpirationDate">
                             {{
                                 currentPlan.expirationStart &&
                                     currentPlan.expirationStart.getFullYear() +
@@ -48,11 +48,11 @@
                             }}
                         </div>
                     </div>
-                    <div>
+                    <!-- <div>
                         <div class="bold">お支払い方法</div>
                         <div class="mt-10">{{ currentPlan.paymentMethod }}</div>
-                    </div>
-                    <div>
+                    </div> -->
+                    <!-- <div>
                         <div class="bold">次回お支払い日</div>
                         <div class="mt-10">
                             {{
@@ -65,8 +65,8 @@
                                         currentPlan.expirationEnd.getDate()
                             }}
                         </div>
-                    </div>
-                    <div class="text-center">
+                    </div> -->
+                    <!-- <div class="text-center">
                         <div class="bold">契約書</div>
                         <div class="mt-5">
                             <button
@@ -81,11 +81,11 @@
                                 <mat-icon>file_open</mat-icon>
                             </button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </mat-card-content>
         </mat-card>
-        <mat-card class="mt-15">
+        <!-- <mat-card class="mt-15">
             <mat-card-content>
                 <div class="border-1 pa-15">
                     <p class="bold mt-0">お支払い履歴</p>
@@ -157,7 +157,7 @@
                     </div>
                 </div>
             </mat-card-content>
-        </mat-card>
+        </mat-card> -->
     </div>
 </div>
 <ng-template #template>

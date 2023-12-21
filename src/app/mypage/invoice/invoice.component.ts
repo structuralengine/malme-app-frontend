@@ -12,36 +12,35 @@ export interface TableRow {
   method: string;
   amount: string;
 }
-
+export interface Plan {
+  name: string;
+  expirationStart: Date;
+  expirationEnd: Date;
+  paymentMethod: string;
+  contractTitle: string;
+  contractContent: string;
+  contractUrl: string;
+}
 @Component({
   selector: 'app-invoice',
   templateUrl: './invoice.component.html',
-  styleUrls: ['./invoice.component.scss'],
+  styleUrls: ['./invoice.component.scss']
 })
 export class InvoiceComponent implements OnInit {
-  currentPlan: any = {
+  currentPlan: Plan = {
     name: '',
-    expirationStart: null,
-    expirationEnd: null,
+    expirationStart: new Date(),
+    expirationEnd: new Date(),
     paymentMethod: '',
     contractTitle: '',
     contractContent: '',
-    contractUrl: '',
+    contractUrl: ''
   };
-  displayedColumns: string[] = [
-    'paymentDay',
-    'plan',
-    'period',
-    'method',
-    'amount',
-  ];
+  displayedColumns: string[] = ['paymentDay', 'plan', 'period', 'method', 'amount'];
   dataSource: TableRow[] = [];
+  hasExpirationDate = true;
 
-  constructor(
-    public dialog: MatDialog,
-    private http: HttpClient,
-    private _snackBar: MatSnackBar
-  ) {}
+  constructor(public dialog: MatDialog, private http: HttpClient, private _snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.http.get(`${environment.apiBaseUrl}/sale/last`).subscribe({
@@ -49,23 +48,26 @@ export class InvoiceComponent implements OnInit {
         if (data) {
           this.currentPlan = {
             name: data.plan.name,
-            expirationStart:
-              data.expirationStart && new Date(data.expirationStart),
+            expirationStart: data.expirationStart && new Date(data.expirationStart),
             expirationEnd: data.expirationEnd && new Date(data.expirationEnd),
-            paymentMethod: data.paymentMethod?.name,
-            contractTitle: data.contract?.title,
-            contractContent: data.contract?.content,
-            contractUrl: data.contract?.url,
+            paymentMethod: data.paymentMethod?.name ?? '',
+            contractTitle: data.contract?.title ?? '',
+            contractContent: data.contract?.content ?? '',
+            contractUrl: data.contract?.url ?? ''
           };
+          console.log('current plan =' + this.currentPlan);
         }
       },
-      error: (_error) =>
-        this._snackBar.open(MSG_FETCH_FAILED, 'Close', {
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          duration: 5000,
-          panelClass: 'notify-failed',
-        }),
+      error: (_error) => {
+        this.currentPlan.name = '';
+        this.hasExpirationDate = false;
+      }
+      //   this._snackBar.open(MSG_FETCH_FAILED, 'Close', {
+      //     horizontalPosition: 'end',
+      //     verticalPosition: 'top',
+      //     duration: 5000,
+      //     panelClass: 'notify-failed'
+      //   })
     });
     this.http.get(`${environment.apiBaseUrl}/sale/list`).subscribe({
       next: (data: any) => {
@@ -78,20 +80,24 @@ export class InvoiceComponent implements OnInit {
                 plan: sale.plan.name,
                 closingDate: new Date(e.closingMonth),
                 paymentMethod: sale.paymentMethod.name,
-                amount: e.price,
+                amount: e.price
               };
             })
           );
         });
         this.dataSource = paymentHistories;
       },
-      error: (_error) =>
-        this._snackBar.open(MSG_FETCH_FAILED, 'Close', {
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          duration: 5000,
-          panelClass: 'notify-failed',
-        }),
+      error: (_error) => {
+        this.currentPlan.name = '';
+        this.hasExpirationDate = false;
+      }
+
+      // this._snackBar.open(MSG_FETCH_FAILED, 'Close', {
+      //   horizontalPosition: 'end',
+      //   verticalPosition: 'top',
+      //   duration: 5000,
+      //   panelClass: 'notify-failed'
+      // })
     });
   }
 

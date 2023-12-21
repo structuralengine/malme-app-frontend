@@ -29,15 +29,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { InvitationComponent } from './invitation/invitation.component';
+import { Dxlogin2023Component } from './dxlogin2023/dxlogin2023.component';
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
     keycloak
       .init({
         config: {
-          url: 'https://auth.malme.app',
-          realm: 'structural-engine',
-          clientId: 'structural-engine'
+          url: environment.keycloakUrl,
+          realm: environment.keycloakRealm,
+          clientId: environment.keycloakClientId
         },
         initOptions: {
           onLoad: 'check-sso'
@@ -46,7 +49,10 @@ function initializeKeycloak(keycloak: KeycloakService) {
         bearerPrefix: 'Bearer',
         bearerExcludedUrls: []
       })
-      .catch((error) => window.alert('ログインに失敗しました'));
+      .catch((error) => {
+        console.log('error =', error);
+        window.alert('ログインに失敗しました');
+      });
 }
 
 @NgModule({
@@ -58,7 +64,10 @@ function initializeKeycloak(keycloak: KeycloakService) {
     InvoiceComponent,
     InviteComponent,
     PlanComponent,
-    InvitationComponent
+    InvitationComponent,
+    Dxlogin2023Component,
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

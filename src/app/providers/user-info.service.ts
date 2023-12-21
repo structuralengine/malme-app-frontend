@@ -11,7 +11,7 @@ interface KeycloakProfile {
   lastName: string;
 }
 
-interface Organization {
+interface Group {
   id: number;
   status: number;
   name: string;
@@ -32,7 +32,7 @@ interface SystemProfile {
   uid: string;
   email: string;
   roles: string[];
-  organization: Organization | null;
+  group: Group | null;
 }
 
 @Injectable({
@@ -42,9 +42,7 @@ export class UserInfoService {
   public keycloakProfile: KeycloakProfile | null = null;
   public systemProfile: SystemProfile | null = null;
 
-  constructor(private readonly keycloak: KeycloakService, private http: HttpClient) {
-    this.initializeProfile();
-  }
+  constructor(private readonly keycloak: KeycloakService, private http: HttpClient) {}
 
   public setKeycloakProfile(param: any) {
     this.keycloakProfile = { ...this.keycloakProfile, ...param };
@@ -53,8 +51,12 @@ export class UserInfoService {
   public syncSystemProfile() {
     // Synchronize Keycloak profile with one from backend API
     return this.http.post(`${environment.apiBaseUrl}/user`, {}).subscribe({
-      next: (data) => (this.systemProfile = data as SystemProfile),
-      error: (error) => console.error('ERROR: ', error)
+      next: (data) => {
+        this.systemProfile = data as SystemProfile;
+      },
+      error: (error) => {
+        console.log('ERROR', error);
+      }
     });
   }
 
@@ -69,7 +71,7 @@ export class UserInfoService {
     });
   }
 
-  async initializeProfile() {
+  public async initializeProfile() {
     const isLoggedIn = await this.keycloak.isLoggedIn();
     if (isLoggedIn) {
       this.syncSystemProfile();

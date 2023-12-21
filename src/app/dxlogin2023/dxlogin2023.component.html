@@ -1,0 +1,33 @@
+<div class="body">
+    <img class="background-img" src="assets\images\dxlogin2023\展示会2023背景.jpg">
+    <div class="whole-abs-container">
+        <div class="whole-container">
+            <div class="titel-container">
+                <div class="titel-top-container">
+                    <img class="title-logo1" src="assets\images\dxlogin2023\建設DX.png">
+                    <img class="title-logo2" src="assets\images\dxlogin2023\来場者向け.png">
+                </div>
+                <img class="title-logo3" src="assets\images\dxlogin2023\無料登録.png">
+            </div>
+            <form #formCheck="ngForm" [formGroup]="form" class="form-check">
+                <div class="form-area">
+                    <div class="input-container">
+                        <input type="text" class="input-text" name="email-address" (keyup)="getKeyupEvent()" placeholder="メールアドレス"
+                            formControlName="emailControl">
+                    </div>
+                    <div class="submit-container">
+                        <button  class="button-ok" name="button-ok" (click)="onClickOK()"
+                            [disabled]="formCheck.invalid">会員登録</button>
+                    </div>
+                </div>
+            </form>
+            <div  *ngIf="resultMessage1 !== ''" class="message-container">
+            
+                <p [class.alert]="!rejistOK" [class.success]="rejistOK">{{resultMessage1}}</p>
+                <br/>
+                <p  [class.alert]="!rejistOK" [class.success]="rejistOK">{{resultMessage2}}</p>
+               
+            </div>
+        </div>
+    </div>
+</div>
