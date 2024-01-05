@@ -1,27 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import {
-  MSG_APPLY_FAILED,
-  MSG_APPLY_SUCCESS,
-  MSG_FETCH_FAILED,
-} from 'src/app/helper/notificationMessages';
 import { environment } from 'src/environments/environment';
+import { UserInfoService } from 'src/app/providers/user-info.service';
 
 @Component({
   selector: 'app-plan',
   templateUrl: './plan.component.html',
-  styleUrls: ['./plan.component.scss'],
+  styleUrls: ['./plan.component.scss']
 })
 export class PlanComponent implements OnInit {
   plans: any[] = [];
   lastSale: any = {};
+  hasGroup = false;
 
-  constructor(private http: HttpClient, private _snackBar: MatSnackBar) {}
+  constructor(public userInfo: UserInfoService, private http: HttpClient) {}
 
   ngOnInit() {
     this.fetchLastSale();
     this.fetchPlans();
+    if (this.userInfo.systemProfile && this.userInfo.systemProfile.group) {
+      this.hasGroup = true;
+    }
   }
 
   fetchLastSale() {
@@ -29,13 +28,9 @@ export class PlanComponent implements OnInit {
       next: (data: any) => {
         this.lastSale = data;
       },
-      error: (_error) =>
-        this._snackBar.open(MSG_FETCH_FAILED, 'Close', {
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          duration: 5000,
-          panelClass: 'notify-failed',
-        }),
+      error: (_error) => {
+        console.log('error = ', _error);
+      }
     });
   }
 
@@ -44,13 +39,9 @@ export class PlanComponent implements OnInit {
       next: (data: any) => {
         this.plans = data;
       },
-      error: (_error) =>
-        this._snackBar.open(MSG_FETCH_FAILED, 'Close', {
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          duration: 5000,
-          panelClass: 'notify-failed',
-        }),
+      error: (_error) => {
+        console.log('error = ', _error);
+      }
     });
   }
 
@@ -58,20 +49,10 @@ export class PlanComponent implements OnInit {
     this.http.post(`${environment.apiBaseUrl}/sale`, { planId }).subscribe({
       next: (data: any) => {
         this.lastSale = data;
-        this._snackBar.open(MSG_APPLY_SUCCESS, 'Close', {
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          duration: 5000,
-          panelClass: 'notify-success',
-        });
       },
-      error: (_error) =>
-        this._snackBar.open(MSG_APPLY_FAILED, 'Close', {
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          duration: 5000,
-          panelClass: 'notify-failed',
-        }),
+      error: (_error) => {
+        console.log('error = ', _error);
+      }
     });
   }
 }

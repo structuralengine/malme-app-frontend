@@ -1,10 +1,5 @@
 <div class="mypage-container">
     <div class="mypage-inner">
-        <img
-            src="../../../assets/images/logo_white.png"
-            alt="StructuralEngine"
-            class="logo-structuralengine"
-        />
         <div class="page-header">
             <h1 class="page-title">ご請求情報</h1>
             <button
@@ -22,47 +17,47 @@
                 <div class="plan-info border-1 pa-15 space-between">
                     <div>
                         <div class="bold">現在の購入プラン</div>
-                        <div class="mt-10">{{ currentPlan.name }}</div>
+                        <div class="mt-10">{{ currentSaleInfo.name }}</div>
                     </div>
                     <div>
-                        <div class="bold">有効期限</div>
-                        <div class="mt-10">
+                        <div class="bold" *ngIf="hasExpirationDate">有効期限</div>
+                        <div class="mt-10" *ngIf="hasExpirationDate">
                             {{
-                                currentPlan.expirationStart &&
-                                    currentPlan.expirationStart.getFullYear() +
+                                currentSaleInfo.expirationStart &&
+                                    currentSaleInfo.expirationStart.getFullYear() +
                                         "/" +
-                                        (currentPlan.expirationStart.getMonth() +
+                                        (currentSaleInfo.expirationStart.getMonth() +
                                             1) +
                                         "/" +
-                                        currentPlan.expirationStart.getDate()
+                                        currentSaleInfo.expirationStart.getDate()
                             }}
                             ~
                             {{
-                                currentPlan.expirationEnd &&
-                                    currentPlan.expirationEnd.getFullYear() +
+                                currentSaleInfo.expirationEnd &&
+                                    currentSaleInfo.expirationEnd.getFullYear() +
                                         "/" +
-                                        (currentPlan.expirationEnd.getMonth() +
+                                        (currentSaleInfo.expirationEnd.getMonth() +
                                             1) +
                                         "/" +
-                                        currentPlan.expirationEnd.getDate()
+                                        currentSaleInfo.expirationEnd.getDate()
                             }}
                         </div>
                     </div>
                     <div>
                         <div class="bold">お支払い方法</div>
-                        <div class="mt-10">{{ currentPlan.paymentMethod }}</div>
+                        <div class="mt-10">{{ currentSaleInfo.paymentMethod }}</div>
                     </div>
                     <div>
                         <div class="bold">次回お支払い日</div>
-                        <div class="mt-10">
+                        <div class="mt-10" *ngIf="hasExpirationDate">
                             {{
-                                currentPlan.expirationEnd &&
-                                    currentPlan.expirationEnd.getFullYear() +
+                                currentSaleInfo.expirationEnd &&
+                                    currentSaleInfo.expirationEnd.getFullYear() +
                                         "/" +
-                                        (currentPlan.expirationEnd.getMonth() +
+                                        (currentSaleInfo.expirationEnd.getMonth() +
                                             1) +
                                         "/" +
-                                        currentPlan.expirationEnd.getDate()
+                                        currentSaleInfo.expirationEnd.getDate()
                             }}
                         </div>
                     </div>
@@ -71,8 +66,8 @@
                         <div class="mt-5">
                             <button
                                 *ngIf="
-                                    currentPlan.contractTitle ||
-                                    currentPlan.contractUrl
+                                    currentSaleInfo.contractTitle ||
+                                    currentSaleInfo.contractUrl
                                 "
                                 mat-mini-fab
                                 color="primary"
@@ -161,9 +156,9 @@
     </div>
 </div>
 <ng-template #template>
-    <h1 mat-dialog-title>{{ currentPlan.contractTitle }}</h1>
+    <h1 mat-dialog-title>{{ currentSaleInfo.contractTitle }}</h1>
     <div mat-dialog-content>
-        <p>{{ currentPlan.contractContent }}</p>
+        <pre>{{ currentSaleInfo.contractContent }}</pre>
     </div>
     <div mat-dialog-actions>
         <button mat-button mat-dialog-close>閉じる</button>

@@ -1,23 +1,5 @@
-<header>
-    <img class="logo" src="../../../assets/images/malme_logo.svg" alt="Malme" />
-    <div *ngIf="!userInfo.keycloakProfile" class="btn-wrapper">
-        <button class="login-btn" (click)="login()">Login</button>
-        <button class="login-btn" (click)="signup()">Signup</button>
-    </div>
-    <div *ngIf="userInfo.keycloakProfile" class="btn-wrapper">
-        <button mat-fab extended [matMenuTriggerFor]="menu" class="header-btn">
-            <mat-icon>account_circle</mat-icon
-            >{{ userInfo.keycloakProfile.username }}さん
-        </button>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="goMypage()">My page</button>
-            <button mat-menu-item (click)="logout()">Logout</button>
-        </mat-menu>
-    </div>
-</header>
+<app-header></app-header>
 <main>
     <router-outlet></router-outlet>
 </main>
-<footer>
-    <p class="copyright">Copyright Malme inc All rights reserved.</p>
-</footer>
+<app-footer></app-footer>

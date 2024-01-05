@@ -12,7 +12,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "app",   
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -40,6 +40,33 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "stg": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.stg.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -70,6 +97,9 @@
           "configurations": {
             "production": {
               "browserTarget": "structuralengine-platform:build:production"
+            },
+            "stg": {
+              "browserTarget": "structuralengine-platform:build:stg"
             },
             "development": {
               "browserTarget": "structuralengine-platform:build:development"
@@ -117,6 +147,7 @@
   "cli": {
     "schematicCollections": [
       "@angular-eslint/schematics"
-    ]
+    ],
+    "analytics": false
   }
 }

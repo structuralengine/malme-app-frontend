@@ -1,18 +1,8 @@
 <div class="mypage-container">
     <div class="mypage-inner">
-        <img
-            src="../../../assets/images/logo_white.png"
-            alt="StructuralEngine"
-            class="logo-structuralengine"
-        />
         <div class="page-header">
             <h1 class="page-title">会員情報</h1>
-            <button
-                mat-button
-                aria-label="ダッシュボード"
-                class="white f-16"
-                routerLink="/mypage"
-            >
+            <button mat-button aria-label="ダッシュボード" class="white f-16" routerLink="/mypage">
                 <b>ダッシュボードへ戻る</b>
                 <mat-icon>reply</mat-icon>
             </button>
@@ -20,47 +10,42 @@
         <mat-card>
             <mat-card-content>
                 <div class="border-1 pa-15">
-                    <form
-                        [formGroup]="accountForm"
-                        (ngSubmit)="onSubmitAccountForm()"
-                    >
+                    <form [formGroup]="accountForm" (ngSubmit)="onSubmitAccountForm()">
                         <div class="login-info">
                             <div>
                                 <mat-form-field>
                                     <mat-label>メールアドレス</mat-label>
-                                    <input
-                                        matInput
-                                        type="text"
-                                        formControlName="email"
-                                        readonly
-                                    />
-                                    <mat-error
-                                        *ngIf="
+                                    <input matInput type="text" formControlName="email" readonly />
+                                    <mat-error *ngIf="
                                             accountFormControl.email.hasError(
                                                 'required'
                                             )
-                                        "
-                                    >
+                                        ">
                                         このフィールドを入力してください。
                                     </mat-error>
                                 </mat-form-field>
                             </div>
-                            <div></div>
+
+                            <div>
+                                <mat-form-field>
+                                    <mat-label>会員種別</mat-label>
+                                    <mat-select required formControlName="userRole">
+                                        <mat-option value="SuperAdmin">最高管理者</mat-option>
+                                        <mat-option value="Admin">管理者</mat-option>
+                                        <mat-option value="">メンバー</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            
                             <div>
                                 <mat-form-field>
                                     <mat-label>姓</mat-label>
-                                    <input
-                                        matInput
-                                        type="text"
-                                        formControlName="lastName"
-                                    />
-                                    <mat-error
-                                        *ngIf="
+                                    <input matInput type="text" formControlName="lastName" />
+                                    <mat-error *ngIf="
                                             accountFormControl.lastName.hasError(
                                                 'required'
                                             )
-                                        "
-                                    >
+                                        ">
                                         このフィールドを入力してください。
                                     </mat-error>
                                 </mat-form-field>
@@ -68,31 +53,20 @@
                             <div>
                                 <mat-form-field>
                                     <mat-label>名</mat-label>
-                                    <input
-                                        matInput
-                                        type="text"
-                                        formControlName="firstName"
-                                    />
-                                    <mat-error
-                                        *ngIf="
+                                    <input matInput type="text" formControlName="firstName" />
+                                    <mat-error *ngIf="
                                             accountFormControl.firstName.hasError(
                                                 'required'
                                             )
-                                        "
-                                    >
+                                        ">
                                         このフィールドを入力してください。
                                     </mat-error>
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="text-right">
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                type="submit"
-                                [disabled]="!accountForm.valid"
-                                class="btn-1"
-                            >
+                            <button mat-raised-button color="primary" type="submit" [disabled]="!accountForm.valid"
+                                class="btn-1">
                                 変&nbsp;更
                             </button>
                         </div>
@@ -100,245 +74,144 @@
                 </div>
             </mat-card-content>
         </mat-card>
-        <mat-card
-            class="mt-15"
-            *ngIf="
+        <mat-card class="mt-15" *ngIf="
                 userInfo.systemProfile &&
                 userInfo.systemProfile.roles.includes('Admin')
-            "
-        >
+            ">
             <mat-card-content>
                 <div class="border-1 pa-15">
-                    <div *ngIf="!hasOrganization" class="mb-15">
+                    <div *ngIf="!hasGroup" class="mb-15">
                         あなたはどの組織にも含まれていません。<br />組織アカウントを作成するには、以下のフォームを入力してください。
                     </div>
-                    <form
-                        [formGroup]="organizationForm"
-                        (ngSubmit)="onSubmitOrganizationForm()"
-                    >
-                        <div class="organization-info">
+                    <form [formGroup]="groupForm" (ngSubmit)="onSubmitGroupForm()">
+                        <div class="group-info">
                             <div>
                                 <mat-form-field>
                                     <mat-label>アカウント種類</mat-label>
                                     <mat-select required formControlName="type">
-                                        <mat-option [value]="0"
-                                            >個人</mat-option
-                                        >
-                                        <mat-option [value]="1"
-                                            >法人</mat-option
-                                        >
-                                        <mat-option [value]="2"
-                                            >大学</mat-option
-                                        >
-                                        <mat-option [value]="3"
-                                            >学生</mat-option
-                                        >
+                                        <mat-option [value]="0">個人</mat-option>
+                                        <mat-option [value]="1">法人</mat-option>
+                                        <mat-option [value]="2">大学</mat-option>
+                                        <mat-option [value]="3">学生</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                                 <mat-form-field>
-                                    <mat-label
-                                        >団体名 / 学校名 / 法人名</mat-label
-                                    >
-                                    <input
-                                        matInput
-                                        type="text"
-                                        formControlName="name"
-                                    />
-                                    <mat-error
-                                        *ngIf="
-                                            organizationFormControl.name.hasError(
+                                    <mat-label>団体名 / 学校名 / 法人名</mat-label>
+                                    <input matInput type="text" formControlName="name" />
+                                    <mat-error *ngIf="
+                                            groupFormControl.name.hasError(
                                                 'required'
                                             )
-                                        "
-                                    >
+                                        ">
                                         このフィールドを入力してください。
                                     </mat-error>
                                 </mat-form-field>
                                 <mat-form-field>
                                     <mat-label>部署名</mat-label>
-                                    <input
-                                        matInput
-                                        type="text"
-                                        formControlName="department"
-                                    />
-                                    <mat-error
-                                        *ngIf="
-                                            organizationFormControl.department.hasError(
+                                    <input matInput type="text" formControlName="department" />
+                                    <mat-error *ngIf="
+                                            groupFormControl.department.hasError(
                                                 'required'
                                             )
-                                        "
-                                    >
+                                        ">
                                         このフィールドを入力してください。
                                     </mat-error>
                                 </mat-form-field>
                                 <mat-form-field>
                                     <mat-label>郵便番号</mat-label>
-                                    <input
-                                        matInput
-                                        type="text"
-                                        formControlName="zipcode"
-                                    />
-                                    <mat-error
-                                        *ngIf="
-                                            organizationFormControl.zipcode.hasError(
+                                    <input matInput type="text" formControlName="zipcode" />
+                                    <mat-error *ngIf="
+                                            groupFormControl.zipcode.hasError(
                                                 'required'
                                             )
-                                        "
-                                    >
+                                        ">
                                         このフィールドを入力してください。
                                     </mat-error>
                                 </mat-form-field>
                                 <mat-form-field>
                                     <mat-label>住所</mat-label>
-                                    <input
-                                        matInput
-                                        type="text"
-                                        formControlName="address"
-                                    />
-                                    <mat-error
-                                        *ngIf="
-                                            organizationFormControl.address.hasError(
+                                    <input matInput type="text" formControlName="address" />
+                                    <mat-error *ngIf="
+                                            groupFormControl.address.hasError(
                                                 'required'
                                             )
-                                        "
-                                    >
+                                        ">
                                         このフィールドを入力してください。
                                     </mat-error>
                                 </mat-form-field>
                                 <mat-form-field>
                                     <mat-label>TEL</mat-label>
-                                    <input
-                                        matInput
-                                        type="tel"
-                                        formControlName="tel"
-                                    />
-                                    <mat-error
-                                        *ngIf="
-                                            organizationFormControl.tel.hasError(
+                                    <input matInput type="tel" formControlName="tel" />
+                                    <mat-error *ngIf="
+                                            groupFormControl.tel.hasError(
                                                 'required'
                                             )
-                                        "
-                                    >
+                                        ">
                                         このフィールドを入力してください。
                                     </mat-error>
                                 </mat-form-field>
                             </div>
                             <div>
-                                <mat-form-field>
-                                    <mat-label>会員種別</mat-label>
-                                    <mat-select
-                                        required
-                                        formControlName="userRole"
-                                    >
-                                        <mat-option value="SuperAdmin"
-                                            >最高管理者</mat-option
-                                        >
-                                        <mat-option value="Admin"
-                                            >管理者</mat-option
-                                        >
-                                        <mat-option value=""
-                                            >メンバー</mat-option
-                                        >
-                                    </mat-select>
-                                </mat-form-field>
+
                                 <mat-form-field>
                                     <mat-label>銀行名</mat-label>
-                                    <input
-                                        matInput
-                                        type="text"
-                                        formControlName="bankName"
-                                    />
-                                    <mat-error
-                                        *ngIf="
-                                            organizationFormControl.bankName.hasError(
+                                    <input matInput type="text" formControlName="bankName" />
+                                    <mat-error *ngIf="
+                                            groupFormControl.bankName.hasError(
                                                 'required'
                                             )
-                                        "
-                                    >
+                                        ">
                                         このフィールドを入力してください。
                                     </mat-error>
                                 </mat-form-field>
                                 <mat-form-field>
                                     <mat-label>支店名</mat-label>
-                                    <input
-                                        matInput
-                                        type="text"
-                                        formControlName="bankBranchName"
-                                    />
-                                    <mat-error
-                                        *ngIf="
-                                            organizationFormControl.bankBranchName.hasError(
+                                    <input matInput type="text" formControlName="bankBranchName" />
+                                    <mat-error *ngIf="
+                                            groupFormControl.bankBranchName.hasError(
                                                 'required'
                                             )
-                                        "
-                                    >
+                                        ">
                                         このフィールドを入力してください。
                                     </mat-error>
                                 </mat-form-field>
                                 <mat-form-field>
                                     <mat-label>口座種別</mat-label>
-                                    <input
-                                        matInput
-                                        type="text"
-                                        formControlName="bankAccountType"
-                                    />
-                                    <mat-error
-                                        *ngIf="
-                                            organizationFormControl.bankAccountType.hasError(
+                                    <input matInput type="text" formControlName="bankAccountType" />
+                                    <mat-error *ngIf="
+                                            groupFormControl.bankAccountType.hasError(
                                                 'required'
                                             )
-                                        "
-                                    >
+                                        ">
                                         このフィールドを入力してください。
                                     </mat-error>
                                 </mat-form-field>
                                 <mat-form-field>
                                     <mat-label>口座番号</mat-label>
-                                    <input
-                                        matInput
-                                        type="tel"
-                                        formControlName="bankAccountNumber"
-                                    />
-                                    <mat-error
-                                        *ngIf="
-                                            organizationFormControl.bankAccountNumber.hasError(
+                                    <input matInput type="tel" formControlName="bankAccountNumber" />
+                                    <mat-error *ngIf="
+                                            groupFormControl.bankAccountNumber.hasError(
                                                 'required'
                                             )
-                                        "
-                                    >
+                                        ">
                                         このフィールドを入力してください。
                                     </mat-error>
                                 </mat-form-field>
                                 <mat-form-field>
                                     <mat-label>利用可能ライセンス数</mat-label>
-                                    <input
-                                        matInput
-                                        type="text"
-                                        readonly
-                                        formControlName="licenses"
-                                    />
+                                    <input matInput type="text" readonly formControlName="licenses" />
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div *ngIf="hasOrganization" class="text-right">
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                type="submit"
-                                [disabled]="!organizationForm.valid"
-                                class="btn-1"
-                            >
+                        <div *ngIf="hasGroup" class="text-right">
+                            <button mat-raised-button color="primary" type="submit" [disabled]="!groupForm.valid"
+                                class="btn-1">
                                 変&nbsp;更
                             </button>
                         </div>
-                        <div *ngIf="!hasOrganization" class="text-right">
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                type="submit"
-                                [disabled]="!organizationForm.valid"
-                                class="btn-1"
-                            >
+                        <div *ngIf="!hasGroup" class="text-right">
+                            <button mat-raised-button color="primary" type="submit" [disabled]="!groupForm.valid"
+                                class="btn-1">
                                 作&nbsp;成
                             </button>
                         </div>

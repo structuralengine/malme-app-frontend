@@ -8,51 +8,66 @@ import { PlanComponent } from './mypage/plan/plan.component';
 import { InviteComponent } from './mypage/invite/invite.component';
 import { AuthGuard } from './app.authguard';
 import { InvitationComponent } from './invitation/invitation.component';
+import { Dxlogin2023Component } from './dxlogin2023/dxlogin2023.component';
 
 const routes: Routes = [
   { path: '', component: TopComponent },
-  { path: 'mypage', component: DashboardComponent, canActivate: [AuthGuard] },
+  {
+    path: 'mypage',
+    component: DashboardComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'view-users'
+    }
+  },
   {
     path: 'mypage/profile',
     component: ProfileComponent,
     canActivate: [AuthGuard],
+    data: {
+      role: 'view-users'
+    }
   },
   {
     path: 'mypage/invoice',
     component: InvoiceComponent,
     canActivate: [AuthGuard],
     data: {
-      role: 'Admin',
-    },
+      role: 'Admin'
+    }
   },
   {
     path: 'mypage/plan',
     component: PlanComponent,
     canActivate: [AuthGuard],
     data: {
-      role: 'Admin',
-    },
+      role: 'Admin'
+    }
   },
   {
     path: 'mypage/invite',
     component: InviteComponent,
     canActivate: [AuthGuard],
     data: {
-      role: 'Admin',
-    },
+      role: 'view-users'
+    }
   },
   {
     path: 'invite/accept/:slug',
-    component: InvitationComponent,
+    component: InvitationComponent
+  },
+  {
+    path: 'dxlogin2023',
+    component: Dxlogin2023Component
   },
   {
     path: '**',
-    component: TopComponent,
-  },
+    component: TopComponent
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true })],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}

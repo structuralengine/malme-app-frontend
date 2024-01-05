@@ -1,6 +1,6 @@
 <div class="container">
     <div *ngIf="inviteSuccess === true" class="container-inner">
-        <p class="company-name">{{ organizationName }}</p>
+        <p class="company-name">{{ groupName }}</p>
         <div>
             <img
                 mat-card-image
@@ -9,7 +9,7 @@
             />
         </div>
         <p class="description">
-            StructuralEngineの組織に招待されました。<br />{{ message }}
+            malmeAppの組織に招待されました。<br />{{ message }}
         </p>
     </div>
     <div *ngIf="inviteSuccess === false" class="container-inner">

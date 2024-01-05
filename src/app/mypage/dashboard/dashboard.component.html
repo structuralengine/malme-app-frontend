@@ -1,11 +1,6 @@
 <div class="mypage-container">
     <div class="mypage-inner">
-        <img
-            src="../../../assets/images/logo_white.png"
-            alt="StructuralEngine"
-            class="logo-structuralengine"
-        />
-        <h1 class="page-title">お試しプラン</h1>
+    <h1 class="page-title">{{currentPlanName}}</h1>
         <mat-card>
             <mat-card-header>
                 <mat-card-title>アプリケーション</mat-card-title>
@@ -82,17 +77,11 @@
                     </mat-card>
                 </li>
                 <li class="page-item">
-                    <mat-card routerLink="/mypage/invite">
+                                <mat-card routerLink="/mypage/invite" >
                         <mat-card-header>
                             <mat-card-title-group>
-                                <img
-                                    mat-card-image
-                                    src="../../../assets/images/invite.png"
-                                    alt="チームに招待する"
-                                />
-                                <mat-card-title
-                                    >チームに招待する</mat-card-title
-                                >
+                                <img mat-card-image src="../../../assets/images/invite.png" alt="チームに招待する" />
+                                <mat-card-title>チームに招待する</mat-card-title>
                             </mat-card-title-group>
                         </mat-card-header>
                     </mat-card>

@@ -2,6 +2,27 @@
     width: 360px;
     max-width: 100%;
 }
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+}
+.invite-button {
+    margin: auto 0px 0px auto;
+}
+.invite-message-div {
+    margin: 15px auto auto 15px;
+
+    .invite-message-span1 {
+        color: black;
+    }
+
+    .invite-message-span2 {
+        color: rgb(255, 174, 0);
+    }
+}
+
 @media screen and (max-width: 959.98px) {
     .table-wrapper {
         overflow-y: auto;

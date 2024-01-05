@@ -1,10 +1,5 @@
 <div class="mypage-container">
     <div class="mypage-inner">
-        <img
-            src="../../../assets/images/logo_white.png"
-            alt="StructuralEngine"
-            class="logo-structuralengine"
-        />
         <div class="page-header">
             <h1 class="page-title">チームに招待する</h1>
             <button
@@ -24,46 +19,39 @@
                         [formGroup]="inviteForm"
                         (ngSubmit)="onSubmitInviteForm()"
                     >
-                        <div>
+                        <div class="flex-container">
                             <div>
-                                <mat-form-field>
+                                <mat-form-field  *ngIf="!memberInputedFlag" >
                                     <mat-label>メールアドレス</mat-label>
-                                    <input
-                                        matInput
-                                        type="email"
-                                        formControlName="email"
-                                    />
-                                    <mat-error
-                                        *ngIf="
-                                            inviteFormControl.email.hasError(
-                                                'required'
-                                            )
-                                        "
-                                    >
+                                    <input matInput type="email" formControlName="email"/>
+                                    <mat-error *ngIf="
+                                                                    inviteFormControl.email.hasError(
+                                                                        'required'
+                                                                    )
+                                                                ">
                                         このフィールドを入力してください。
                                     </mat-error>
-                                    <mat-error
-                                        *ngIf="
-                                            !inviteFormControl.email.hasError(
-                                                'required'
-                                            ) &&
-                                            inviteFormControl.email.hasError(
-                                                'email'
-                                            )
-                                        "
-                                    >
+                                    <mat-error *ngIf="
+                                                                    !inviteFormControl.email.hasError(
+                                                                        'required'
+                                                                    ) &&
+                                                                    inviteFormControl.email.hasError(
+                                                                        'email'
+                                                                    )
+                                                                ">
                                         メール形式が正しくありません。
                                     </mat-error>
                                 </mat-form-field>
                             </div>
-                            <div>
-                                <button
-                                    mat-raised-button
-                                    color="primary"
-                                    type="submit"
-                                    [disabled]="!inviteForm.valid"
-                                    class="btn-1"
-                                >
+                            <div class="invite-message-div"><span class="invite-message-span1">{{ invitedMessage1 }}</span><span
+                                    class="invite-message-span2">{{ invitedMessage2 }}</span></div>
+                            <div class="invite-button">
+                                <button mat-raised-button color="primary" type="submit" [disabled]="
+                                                                      !inviteForm.valid || memberInputedFlag ||
+                                                                      invitedFlag 
+                                                                      || (userInfo.systemProfile && userInfo.systemProfile.group &&
+                                                                                        userInfo.systemProfile.group.licenses -inviteDataArray.length <= 0)
+                                                                                        " class="btn-1">
                                     招待を送る
                                 </button>
                             </div>
@@ -77,7 +65,7 @@
                 <div class="border-1 pa-15">
                     <p class="bold mt-0">チームメンバー</p>
                     <div class="table-wrapper">
-                        <table mat-table [dataSource]="dataSource">
+                        <table mat-table [dataSource]="inviteDataArray">
                             <ng-container matColumnDef="email">
                                 <th mat-header-cell *matHeaderCellDef>
                                     メールアドレス

@@ -1,18 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import {
-  MSG_INVITE_FAILED,
-  MSG_INVITE_SUCCESS,
-  MSG_SERVER_ERROR,
-  MSG_UPDATE_FAILED,
-  MSG_UPDATE_SUCCESS,
-} from 'src/app/helper/notificationMessages';
 import { UserInfoService } from 'src/app/providers/user-info.service';
 import { environment } from 'src/environments/environment';
 
-export interface TableRow {
+export interface User {
+  email: string;
+  roles: string[];
+  status: string;
+  action: string;
+  isExpired: boolean;
+}
+export interface InviteFormDatas {
   email: string;
   role: string;
   status: string;
@@ -22,24 +21,32 @@ export interface TableRow {
 @Component({
   selector: 'app-invite',
   templateUrl: './invite.component.html',
-  styleUrls: ['./invite.component.scss'],
+  styleUrls: ['./invite.component.scss']
 })
 export class InviteComponent implements OnInit {
   displayedColumns: string[] = ['email', 'role', 'status', 'action'];
-  dataSource: TableRow[] = [];
+  inviteDataArray: InviteFormDatas[] = [];
+  invitedMessage1 = '';
+  invitedMessage2 = '';
+  invitedFlag = false;
+  memberInputedFlag = false;
 
   inviteForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email])
   });
 
-  constructor(
-    public userInfo: UserInfoService,
-    private http: HttpClient,
-    private _snackBar: MatSnackBar
-  ) {}
+  constructor(public userInfo: UserInfoService, private http: HttpClient) {}
 
   ngOnInit() {
     this.syncTeamMembers();
+    this.userInfo.syncSystemProfile();
+    if (!(this.userInfo.systemProfile && this.userInfo.systemProfile.group)) {
+      this.memberInputedFlag = true;
+    }
+    this.inviteForm.valueChanges.subscribe(() => {
+      this.invitedMessage1 = '';
+      this.invitedFlag = false;
+    });
   }
 
   get inviteFormControl() {
@@ -47,92 +54,78 @@ export class InviteComponent implements OnInit {
   }
 
   onSubmitInviteForm() {
-    this.invite(this.inviteForm.value.email as string);
+    if (!this.invitedFlag) {
+      this.invite(this.inviteForm.value.email as string);
+    }
+    this.invitedFlag = true;
   }
 
   updateRole(email: string) {
-    this.http
-      .patch(`${environment.apiBaseUrl}/user/role`, { email })
-      .subscribe({
-        next: (_data) => {
-          this._snackBar.open(MSG_UPDATE_SUCCESS, 'Close', {
-            horizontalPosition: 'end',
-            verticalPosition: 'top',
-            duration: 5000,
-            panelClass: 'notify-success',
-          });
-          this.syncTeamMembers();
-        },
-        error: (_error) =>
-          this._snackBar.open(MSG_UPDATE_FAILED, 'Close', {
-            horizontalPosition: 'end',
-            verticalPosition: 'top',
-            duration: 5000,
-            panelClass: 'notify-failed',
-          }),
-      });
+    this.http.patch(`${environment.apiBaseUrl}/user/role`, { email }).subscribe({
+      next: (_data) => {
+        this.syncTeamMembers();
+      },
+      error: (_error) => {
+        console.log('error = ', _error);
+      }
+    });
   }
 
   syncTeamMembers() {
-    this.http.get(`${environment.apiBaseUrl}/user/organization`).subscribe({
+    this.http.get(`${environment.apiBaseUrl}/user/group`).subscribe({
       next: (data: any) => {
-        const dataSource: TableRow[] = [];
-        data.userList.forEach((element: any) => {
-          dataSource.push({
-            email: element.email,
-            role: element.roles.includes('SuperAdmin')
+        const inviteFormDatas: InviteFormDatas[] = [];
+        data.userList.forEach((user: User) => {
+          inviteFormDatas.push({
+            email: user.email,
+            role: user.roles.includes('SuperAdmin')
               ? '最高管理者'
-              : element.roles.includes('Admin')
+              : user.roles.includes('Admin')
               ? '管理者'
               : 'メンバー',
             status: '',
             action:
-              !element.roles.includes('SuperAdmin') &&
-              element.roles.includes('Admin')
+              !user.roles.includes('SuperAdmin') && user.roles.includes('Admin')
                 ? '管理権限を削除する'
-                : !element.roles.includes('Admin')
+                : !user.roles.includes('Admin')
                 ? '管理権限を委託する'
-                : '',
+                : ''
           });
         });
-        data.pendingInvites.forEach((element: any) => {
-          dataSource.push({
-            email: element.email,
+        data.pendingInvites.forEach((invitedUser: User) => {
+          inviteFormDatas.push({
+            email: invitedUser.email,
             role: '',
-            status: element.isExpired ? '招待リンクが期限切れ' : '承認待ち',
-            action: element.isExpired ? '再招待する' : '',
+            status: invitedUser.isExpired ? '招待リンクが期限切れ' : '承認待ち',
+            action: invitedUser.isExpired ? '再招待する' : ''
           });
         });
-        this.dataSource = dataSource;
+        this.inviteDataArray = inviteFormDatas;
+        if (
+          this.userInfo.systemProfile &&
+          this.userInfo.systemProfile.group &&
+          this.userInfo.systemProfile.group.licenses - this.inviteDataArray.length <= 0
+        ) {
+          this.invitedMessage2 = '招待の上限を超えています';
+        } else {
+          this.invitedMessage2 = '';
+        }
       },
-      error: (_error) =>
-        this._snackBar.open(MSG_SERVER_ERROR, 'Close', {
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          duration: 5000,
-          panelClass: 'notify-failed',
-        }),
+      error: (_error) => {
+        console.log('error = ', _error);
+      }
     });
   }
 
   invite(email: string) {
     this.http.post(`${environment.apiBaseUrl}/invite`, { email }).subscribe({
       next: (_data) => {
-        this._snackBar.open(MSG_INVITE_SUCCESS, 'Close', {
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          duration: 5000,
-          panelClass: 'notify-success',
-        });
         this.syncTeamMembers();
+        this.invitedMessage1 = '招待メールを送信しました';
       },
-      error: (_error) =>
-        this._snackBar.open(MSG_INVITE_FAILED, 'Close', {
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          duration: 5000,
-          panelClass: 'notify-failed',
-        }),
+      error: (_error) => {
+        this.invitedMessage1 = '登録できませんでした。サポートにお問い合わせください';
+      }
     });
   }
 }
